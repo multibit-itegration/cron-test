@@ -1,0 +1,846 @@
+{
+	"info": {
+		"_postman_id": "03b1c7f3-7cbf-43db-82b8-93894130f5a8",
+		"name": "Тест некассир",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21209730"
+	},
+	"item": [
+		{
+			"name": "103.88.242.23",
+			"item": [
+				{
+					"name": "Проверка жизни 103.88.242.23",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Прохождение healthcheck\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://103.88.242.23/healthcheck",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"242",
+								"23"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание заказа 103.88.242.23",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"        const response = pm.response.json();",
+									"        pm.collectionVariables.set(\"1\", response.order_id);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Создание заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_token\": \"qwerty\",\n  \"orderInfo\": [\n    {\n      \"phone\": \"+74912510883\",\n      \"orderTypeId\": \"bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0\",\n      \"comment\": \"\",\n      \"tabName\": null,\n      \"items\": [\n        {\n          \"name\": \"Соус горчичный\",\n          \"productId\": \"3695b04a-0d4e-45e9-9775-795d3fc880e2\",\n          \"price\": 20,\n          \"type\": \"Product\",\n          \"amount\": 1,\n          \"sizeName\": null,\n          \"productSizeId\": null,\n          \"modifiers\": [],\n          \"comment\": \"\",\n          \"positionId\": null,\n          \"onUpsale\": true\n        }\n      ],\n      \"discountsInfo\": null,\n      \"payments\": [\n        {\n          \"sum\": 20.0,\n          \"payTypes_id\": 511559\n        }\n      ],\n      \"customer\": [\n        {\n          \"name\": \"Киоск\",\n          \"email\": \"\",\n          \"type\": \"regular\"\n        }\n      ],\n      \"deliveryTo\": null,\n      \"chequeAdditionalInfo\": null,\n      \"is_order_create\": true,\n      \"track\": null\n    }\n  ],\n  \"session_uid\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://103.88.242.23:8001/menu/make-order/",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"242",
+								"23"
+							],
+							"port": "8001",
+							"path": [
+								"menu",
+								"make-order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Толкнуть заказ 103.88.242.23",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Хуки заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://103.88.242.23:8001/bank/kkt-webhook/?result=true&order_id={{1}}&terminal_id=1&UniversalID=1&sum=1",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"242",
+								"23"
+							],
+							"port": "8001",
+							"path": [
+								"bank",
+								"kkt-webhook",
+								""
+							],
+							"query": [
+								{
+									"key": "result",
+									"value": "true"
+								},
+								{
+									"key": "order_id",
+									"value": "{{1}}"
+								},
+								{
+									"key": "terminal_id",
+									"value": "1"
+								},
+								{
+									"key": "UniversalID",
+									"value": "1"
+								},
+								{
+									"key": "sum",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "103.88.243.193",
+			"item": [
+				{
+					"name": "Проверка жизни 103.88.243.193",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Прохождение healthcheck\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://103.88.243.193/healthcheck",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"243",
+								"193"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание заказа 103.88.243.193",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"        const response = pm.response.json();",
+									"        pm.collectionVariables.set(\"2\", response.order_id);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Создание заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_token\": \"qwerty\",\n  \"orderInfo\": [\n    {\n      \"phone\": \"+74912510883\",\n      \"orderTypeId\": \"bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0\",\n      \"comment\": \"\",\n      \"tabName\": null,\n      \"items\": [\n        {\n          \"name\": \"Соус горчичный\",\n          \"productId\": \"3695b04a-0d4e-45e9-9775-795d3fc880e2\",\n          \"price\": 20,\n          \"type\": \"Product\",\n          \"amount\": 1,\n          \"sizeName\": null,\n          \"productSizeId\": null,\n          \"modifiers\": [],\n          \"comment\": \"\",\n          \"positionId\": null,\n          \"onUpsale\": true\n        }\n      ],\n      \"discountsInfo\": null,\n      \"payments\": [\n        {\n          \"sum\": 20.0,\n          \"payTypes_id\": 511559\n        }\n      ],\n      \"customer\": [\n        {\n          \"name\": \"Киоск\",\n          \"email\": \"\",\n          \"type\": \"regular\"\n        }\n      ],\n      \"deliveryTo\": null,\n      \"chequeAdditionalInfo\": null,\n      \"is_order_create\": true,\n      \"track\": null\n    }\n  ],\n  \"session_uid\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://103.88.243.193:8001/menu/make-order/",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"243",
+								"193"
+							],
+							"port": "8001",
+							"path": [
+								"menu",
+								"make-order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Толкнуть заказ 103.88.243.193",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Хуки заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://103.88.243.193:8001/bank/kkt-webhook/?result=true&order_id={{2}}&terminal_id=1&UniversalID=1&sum=1",
+							"protocol": "http",
+							"host": [
+								"103",
+								"88",
+								"243",
+								"193"
+							],
+							"port": "8001",
+							"path": [
+								"bank",
+								"kkt-webhook",
+								""
+							],
+							"query": [
+								{
+									"key": "result",
+									"value": "true"
+								},
+								{
+									"key": "order_id",
+									"value": "{{2}}"
+								},
+								{
+									"key": "terminal_id",
+									"value": "1"
+								},
+								{
+									"key": "UniversalID",
+									"value": "1"
+								},
+								{
+									"key": "sum",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "147.45.141.44",
+			"item": [
+				{
+					"name": "Проверка жизни 147.45.141.44",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Прохождение healthcheck\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://147.45.141.44/healthcheck",
+							"protocol": "http",
+							"host": [
+								"147",
+								"45",
+								"141",
+								"44"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Создание заказа 147.45.141.44",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"        const response = pm.response.json();",
+									"        pm.collectionVariables.set(\"3\", response.order_id);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Создание заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_token\": \"qwerty\",\n  \"orderInfo\": [\n    {\n      \"phone\": \"+74912510883\",\n      \"orderTypeId\": \"bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0\",\n      \"comment\": \"\",\n      \"tabName\": null,\n      \"items\": [\n        {\n          \"name\": \"Соус горчичный\",\n          \"productId\": \"3695b04a-0d4e-45e9-9775-795d3fc880e2\",\n          \"price\": 20,\n          \"type\": \"Product\",\n          \"amount\": 1,\n          \"sizeName\": null,\n          \"productSizeId\": null,\n          \"modifiers\": [],\n          \"comment\": \"\",\n          \"positionId\": null,\n          \"onUpsale\": true\n        }\n      ],\n      \"discountsInfo\": null,\n      \"payments\": [\n        {\n          \"sum\": 20.0,\n          \"payTypes_id\": 511559\n        }\n      ],\n      \"customer\": [\n        {\n          \"name\": \"Киоск\",\n          \"email\": \"\",\n          \"type\": \"regular\"\n        }\n      ],\n      \"deliveryTo\": null,\n      \"chequeAdditionalInfo\": null,\n      \"is_order_create\": true,\n      \"track\": null\n    }\n  ],\n  \"session_uid\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://147.45.141.44:8001/menu/make-order/",
+							"protocol": "http",
+							"host": [
+								"147",
+								"45",
+								"141",
+								"44"
+							],
+							"port": "8001",
+							"path": [
+								"menu",
+								"make-order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Толкнуть заказ 147.45.141.44",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    try {",
+									"        pm.response.to.have.status(200);",
+									"    } catch (error) {",
+									"        sendTestErrorToTelegram(error, \"Хуки заказа\");",
+									"        throw error; // чтобы тест был отмечен как failed",
+									"    }",
+									"});",
+									"",
+									"function sendTestErrorToTelegram(error, testName) {",
+									"    const errorMessage = `🚨 Ошибка в тесте: ${testName}\\n\\n` +",
+									"                        `🔧 Детали: ${error.message}\\n` +",
+									"                        `📋 Запрос: ${pm.info.requestName}\\n` +",
+									"                        `🔗 Endpoint: ${pm.request.url}\\n` +",
+									"                        `⏰ Время: ${new Date().toLocaleString()}`;",
+									"",
+									"",
+									"    // Отправляем в Telegram",
+									"    pm.sendRequest({",
+									"        url: `${pm.variables.get(\"base_url\")}/bot${pm.variables.get(\"telegram_bot_token\")}/sendMessage`,",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/json'",
+									"        },",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify({",
+									"                chat_id: pm.variables.get(\"telegram_chat_id\"),",
+									"                text: errorMessage,",
+									"                parse_mode: 'HTML'",
+									"            })",
+									"        }",
+									"    });",
+									"    ",
+									"    console.log(`❌ Ошибка отправлена в Telegram: ${testName}`);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://147.45.141.44:8001/bank/kkt-webhook/?result=true&order_id={{3}}&terminal_id=1&UniversalID=1&sum=1",
+							"protocol": "http",
+							"host": [
+								"147",
+								"45",
+								"141",
+								"44"
+							],
+							"port": "8001",
+							"path": [
+								"bank",
+								"kkt-webhook",
+								""
+							],
+							"query": [
+								{
+									"key": "result",
+									"value": "true"
+								},
+								{
+									"key": "order_id",
+									"value": "{{3}}"
+								},
+								{
+									"key": "terminal_id",
+									"value": "1"
+								},
+								{
+									"key": "UniversalID",
+									"value": "1"
+								},
+								{
+									"key": "sum",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "1",
+			"value": ""
+		},
+		{
+			"key": "2",
+			"value": ""
+		},
+		{
+			"key": "3",
+			"value": ""
+		},
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "telegram_bot_token",
+			"value": ""
+		},
+		{
+			"key": "telegram_chat_id",
+			"value": ""
+		}
+	]
+}
