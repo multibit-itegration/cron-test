@@ -1,0 +1,15 @@
+services:
+  - type: cron
+    name: api-tests
+    schedule: "*/10 * * * *"
+    env: docker
+    buildCommand: ""
+    startCommand: |
+      # Скачиваем коллекцию из GitHub
+      wget -O collection.json "https://raw.githubusercontent.com/ВАШ_USERNAME/ВАШ_REPO/main/collection.json"
+      
+      # Запускаем тесты
+      npx newman run collection.json \
+        --environment-var "telegram_bot_token=$TELEGRAM_BOT_TOKEN" \
+        --environment-var "telegram_chat_id=$TELEGRAM_CHAT_ID" \
+        --environment-var "base_url=https://api.telegram.org"
